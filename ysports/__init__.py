@@ -43,7 +43,6 @@ class YLeague(object):
             league_data = c_json['fantasy_content']['league'][0]
             self.name = league_data['name']
             self.num_teams = league_data['num_teams']
-            self.current_week = league_data['current_week']
             self.league_id = league_data['league_id']
             self.url = league_data['url']
             self.start_date = league_data['start_date']
@@ -56,12 +55,80 @@ class YLeague(object):
         Return the league's latest scoreboard, or the scoreboard for a given week 
         if week is specified.
         """
-
-        q = "select * from fantasysports.leagues.scoreboard where league_key='" + self.league_key + "'"
+        q = "select * from fantasysports.leagues.scoreboard where league_key='{}'".format(self.league_key)
         if week:
-            q = q +  " and week=" + str(week)
+            q = "{0} and week={1}".format(q, week)
+        r, c = self.yauth.request_yql(q)
+        
+        if r['status'] == '200':
+            return json.loads(c)["query"]["results"]["league"]["scoreboard"]["matchups"]["matchup"]
+        else:
+            raise IOError
+	
+	
+    def standings(self):
+        """
+        Return the ranking of teams within the league.
+        """
+        q = "select * from fantasysports.leagues.standings where league_key='{}'".format(self.league_key)
+        r, c = self.yauth.request_yql(q)
+        
+        if r['status'] == '200':
+            return json.loads(c)["query"]["results"]["league"]["standings"]["teams"]["team"]
+        else:
+            raise IOError
+    
+    
+    def teams(self):
+        """
+        Return all teams in the league.
+        """
+        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/{}/teams'.format(self.league_key)
+        r, c = self.yauth.request(q)
 
-        return self.yauth.request_yql(q)
+        if r['status'] == '200':
+            return json.loads(c)["fantasy_content"]["league"][1]["teams"]
+        else:
+            raise IOError
+    
+    
+    def players(self):
+        """
+        Return the league's eligible players.
+        """
+        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/{}/players'.format(self.league_key)
+        r, c = self.yauth.request(q)
+
+        if r['status'] == '200':
+            return json.loads(c)["fantasy_content"]["league"][1]["players"]
+        else:
+            raise IOError
+    
+    
+    def draftresults(self):
+        """
+        Return draft results for all teams in the league.
+        """
+        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/{}/draftresults'.format(self.league_key)
+        r, c = self.yauth.request(q)
+
+        if r['status'] == '200':
+            return json.loads(c)["fantasy_content"]["league"][1]["draft_results"]
+        else:
+            raise IOError
+    
+    
+    def transactions(self):
+        """
+        Return all league transactions -- adds, drops, and trades.
+        """
+        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/{}/transactions'.format(self.league_key)
+        r, c = self.yauth.request(q)
+
+        if r['status'] == '200':
+            return json.loads(c)["fantasy_content"]["league"][1]["transactions"]
+        else:
+            raise IOError
 
 
 class YAuth(object):
