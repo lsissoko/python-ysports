@@ -16,7 +16,7 @@ league data at a higher level of abstraction.
 - better error handling
 - dynamically insert query parameters
 - secure token storage
-- flesh out YLeague
+- ~~flesh out YLeague~~
 - more classes for representing different data sets (e.g. Player, Roster, etc.)
 
 ### Contributions
@@ -29,9 +29,9 @@ Download from github.
 ### Dependencies
 - httplib2
 
-`
-    >>> pip install httplib2
-`
+```sh
+>>> pip install httplib2
+```
 
 - [zbowling's fork of python oauth2](https://github.com/zbowling/python-oauth2) (See [discussion on StackOverflow](http://stackoverflow.com/questions/4026759/problems-with-python-oauth2-and-yahoos-fantasy-sports-api/4468269#4468269) for why this fork.)
 
@@ -54,25 +54,30 @@ Enter your consumer key and consumer secret in the authorization csv file:
 
 Create an Auth object, then create a League object:
 
-    >>> import ysports
-    >>> Y = ysports.YAuth()
-    Enter Yahoo Authorization code: xxxxxx
-    >>> L = ysports.YLeague(Y, "<your_league_key>")
-    >>> L.name
-    Your League Name
-
+```python
+>>> import ysports
+>>> Y = ysports.YAuth()
+Enter Yahoo Authorization code: xxxxxx
+>>> L = ysports.YLeague(Y, "<your_league_key>")
+>>> L.name
+# Your League Name
+```
 
 #### Arbitrary REST Query
 
-    >>> q1 = 'http://fantasysports.yahooapis.com/fantasy/v2/player/223.p.5479'
-    >>> response, content = Y.request(q1)
-    >>> print content
-    [... fantasy info for Drew Brees, JSON format ...]
+```python
+>>> q1 = 'http://fantasysports.yahooapis.com/fantasy/v2/player/223.p.5479'
+>>> response, content = Y.request(q1)
+>>> print content
+# [... fantasy info for Drew Brees, JSON format ...]
+```
 
     
 #### Arbitrary YQL Query
-    >>> q2 = 'select * from fantasysports.leagues.scoreboard where league_key="<your_league_key>"'
-    >>> response, content = Y.request_yql(q2)
-    >>> print content
-    [... your league's info, JSON format ...]
+```python
+>>> q2 = 'select * from fantasysports.leagues.scoreboard where league_key="<your_league_key>"'
+>>> response, content = Y.request_yql(q2)
+>>> print content
+# [... your league's info, JSON format ...]
+```
 
