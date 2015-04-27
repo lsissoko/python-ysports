@@ -32,24 +32,25 @@ class YLeague(object):
         """
         self.yauth = YAuth
         self.league_key = league_key
+        self.uri = 'http://fantasysports.yahooapis.com/fantasy/v2/league/' + \
+            self.league_key
         self.__get_league_info()
 
     def __get_league_info(self):
         """
         Load league info from Yahoo.
         """
-        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/' + \
-            self.league_key
+        q = self.uri
         r, c = self.yauth.request(q)
 
         if r['status'] == '200':
             c_json = json.loads(c)
-            league_data = c_json['fantasy_content']['league'][0]
-            self.name = league_data['name']
-            self.num_teams = league_data['num_teams']
-            self.league_id = league_data['league_id']
-            self.url = league_data['url']
-            self.start_date = league_data['start_date']
+            game_data = c_json['fantasy_content']['league'][0]
+            self.name = game_data['name']
+            self.num_teams = game_data['num_teams']
+            self.league_id = game_data['league_id']
+            self.url = game_data['url']
+            self.start_date = game_data['start_date']
         else:
             raise IOError
 
@@ -86,8 +87,7 @@ class YLeague(object):
         """
         Return all teams in the league.
         """
-        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/{}/teams'.format(
-            self.league_key)
+        q = self.uri + "/teams"
         r, c = self.yauth.request(q)
 
         if r['status'] == '200':
@@ -99,8 +99,7 @@ class YLeague(object):
         """
         Return the league's eligible players.
         """
-        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/{}/players'.format(
-            self.league_key)
+        q = self.uri + "/players"
         r, c = self.yauth.request(q)
 
         if r['status'] == '200':
@@ -112,8 +111,7 @@ class YLeague(object):
         """
         Return draft results for all teams in the league.
         """
-        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/{}/draftresults'.format(
-            self.league_key)
+        q = self.uri + "/draftresults"
         r, c = self.yauth.request(q)
 
         if r['status'] == '200':
@@ -125,8 +123,7 @@ class YLeague(object):
         """
         Return all league transactions -- adds, drops, and trades.
         """
-        q = 'http://fantasysports.yahooapis.com/fantasy/v2/league/{}/transactions'.format(
-            self.league_key)
+        q = self.uri + "/transactions"
         r, c = self.yauth.request(q)
 
         if r['status'] == '200':
