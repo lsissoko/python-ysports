@@ -1,12 +1,12 @@
 """
-Defaults and standard values for various settings used 
+Defaults and standard values for various settings used
 in the YSports module.
 """
 import logging
 
 
 ## Defaults
-DFT_LEAGUE_KEY = 'nfl.l.000000'
+DFT_LEAGUE_KEY = '223.l.431' # Y! Friends and Family League
 DFT_AUTH_FILE = 'ysports/cache/tokensecrets.csv'
 LOG_FILENAME = 'ysports/cache/ysports.log'
 INTERACTIVE_AUTHORIZATION = True

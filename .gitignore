@@ -1,6 +1,8 @@
 *.pyc
 *.swp
 .DS_Store
+
+oauth2/
+
 brainstorm/
 brainstorm.*
-oauth2/

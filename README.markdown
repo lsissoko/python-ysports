@@ -39,9 +39,12 @@ Download from github.
 ## Usage
 
 ### Setup
-Enter your consumer key and consumer secret into the appropriate fields in the authorization csv file:
+Create an authorization csv file: ``./ysports/cache/tokensecrets.csv``
 
-    ./ysports/cache/tokensecrets.csv
+Enter your consumer key and consumer secret in the authorization csv file:
+
+    consumer_secret,consumer_key,token_key,token_secret,session_handle
+    <consumer_secret_here>,<consumer_key_here>,,,
 
 **Note: determine your own method for securely storing your authorization tokens. The method used in this library is not secure.**
 
