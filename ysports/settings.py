@@ -6,7 +6,9 @@ import logging
 
 
 # Defaults
-DFT_LEAGUE_KEY = '223.l.431'  # Y! Friends and Family League
+DFT_LEAGUE_KEY = '223.l.431'   # Y! Friends and Family League
+DFT_GAME_KEY = '223'           # NFL Plus (2009 Season)
+DFT_PLAYER_KEY = '223.p.1025'  # Brett Favre
 DFT_AUTH_FILE = 'ysports/cache/tokensecrets.csv'
 LOG_FILENAME = 'ysports/cache/ysports.log'
 INTERACTIVE_AUTHORIZATION = True

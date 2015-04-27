@@ -132,6 +132,113 @@ class YLeague(object):
             raise IOError
 
 
+class YGame(object):
+
+    def __init__(self, YAuth, game_key=DFT_GAME_KEY):
+        """
+        Initialize an object to represent a Yahoo fantasy sports league.
+        """
+        self.yauth = YAuth
+        self.game_key = game_key
+        self.uri = 'http://fantasysports.yahooapis.com/fantasy/v2/game/' + \
+            game_key
+        self.__get_game_info()
+
+    def __get_game_info(self):
+        """
+        Load game info from Yahoo.
+        """
+        q = self.uri
+        r, c = self.yauth.request(q)
+
+        if r['status'] == '200':
+            c_json = json.loads(c)
+            game_data = c_json['fantasy_content']['game'][0]
+            self.code = game_data['code']
+            self.name = game_data['name']
+            self.url = game_data['url']
+            self.season = game_data['season']
+            self.type = game_data['type']
+        else:
+            raise IOError
+
+    def leagues(self, league_keys):
+        """
+        Return specified leagues under a game.
+        """
+        if league_keys in [None, []]:
+            league_keys = [DFT_LEAGUE_KEY]
+
+        return [YLeague(self.yauth, league_key)
+                for league_key in league_keys
+                if str.startswith(league_key, self.game_key)]
+
+    # TODO: get this working
+    #
+    # def players(self, player_keys):
+    #     """
+    #     Return specified players under a game.
+    #     """
+    #     if player_keys in [None, []]:
+    #         player_keys = [DFT_PLAYER_KEY]
+
+    #     q = "{}/players;player_keys={}".format(self.uri, ",".join(player_keys))
+    #     r, c = self.yauth.request(q)
+
+    #     if r['status'] == '200':
+    #         return json.loads(c)["fantasy_content"]["game"][1]["players"]
+    #     else:
+    #         raise IOError
+
+    def game_weeks(self):
+        """
+        Return start and end date information for each week in the game.
+        """
+        q = self.uri + "/game_weeks"
+        r, c = self.yauth.request(q)
+
+        if r['status'] == '200':
+            return json.loads(c)["fantasy_content"]["game"][1]["game_weeks"]
+        else:
+            raise IOError
+
+    def stat_categories(self):
+        """
+        Return start and end date information for each week in the game.
+        """
+        q = self.uri + "/stat_categories"
+        r, c = self.yauth.request(q)
+
+        if r['status'] == '200':
+            return json.loads(c)["fantasy_content"]["game"][1]["stat_categories"]
+        else:
+            raise IOError
+
+    def position_types(self):
+        """
+        Return detailed description of all player position types for the game.
+        """
+        q = self.uri + "/position_types"
+        r, c = self.yauth.request(q)
+
+        if r['status'] == '200':
+            return json.loads(c)["fantasy_content"]["game"][1]["position_types"]
+        else:
+            raise IOError
+
+    def roster_positions(self):
+        """
+        Return detailed description of all roster positions for the game.
+        """
+        q = self.uri + "/roster_positions"
+        r, c = self.yauth.request(q)
+
+        if r['status'] == '200':
+            return json.loads(c)["fantasy_content"]["game"][1]["roster_positions"]
+        else:
+            raise IOError
+
+
 class YAuth(object):
 
     def __init__(self, auth_filepath=DFT_AUTH_FILE):
