@@ -40,17 +40,16 @@ class YLeague(object):
         """
         Load league info from Yahoo.
         """
-        q = self.uri
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri)
 
         if r['status'] == '200':
             c_json = json.loads(c)
-            game_data = c_json['fantasy_content']['league'][0]
-            self.name = game_data['name']
-            self.num_teams = game_data['num_teams']
-            self.league_id = game_data['league_id']
-            self.url = game_data['url']
-            self.start_date = game_data['start_date']
+            metadata = c_json['fantasy_content']['league'][0]
+            self.name = metadata['name']
+            self.num_teams = metadata['num_teams']
+            self.league_id = metadata['league_id']
+            self.url = metadata['url']
+            self.start_date = metadata['start_date']
         else:
             raise IOError
 
@@ -87,8 +86,7 @@ class YLeague(object):
         """
         Return all teams in the league.
         """
-        q = self.uri + "/teams"
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri + "/teams")
 
         if r['status'] == '200':
             return json.loads(c)["fantasy_content"]["league"][1]["teams"]
@@ -99,8 +97,7 @@ class YLeague(object):
         """
         Return the league's eligible players.
         """
-        q = self.uri + "/players"
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri + "/players")
 
         if r['status'] == '200':
             return json.loads(c)["fantasy_content"]["league"][1]["players"]
@@ -111,8 +108,7 @@ class YLeague(object):
         """
         Return draft results for all teams in the league.
         """
-        q = self.uri + "/draftresults"
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri + "/draftresults")
 
         if r['status'] == '200':
             return json.loads(c)["fantasy_content"]["league"][1]["draft_results"]
@@ -123,8 +119,7 @@ class YLeague(object):
         """
         Return all league transactions -- adds, drops, and trades.
         """
-        q = self.uri + "/transactions"
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri + "/transactions")
 
         if r['status'] == '200':
             return json.loads(c)["fantasy_content"]["league"][1]["transactions"]
@@ -148,17 +143,16 @@ class YGame(object):
         """
         Load game info from Yahoo.
         """
-        q = self.uri
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri)
 
         if r['status'] == '200':
             c_json = json.loads(c)
-            game_data = c_json['fantasy_content']['game'][0]
-            self.code = game_data['code']
-            self.name = game_data['name']
-            self.url = game_data['url']
-            self.season = game_data['season']
-            self.type = game_data['type']
+            metadata = c_json['fantasy_content']['game'][0]
+            self.code = metadata['code']
+            self.name = metadata['name']
+            self.url = metadata['url']
+            self.season = metadata['season']
+            self.type = metadata['type']
         else:
             raise IOError
 
@@ -194,8 +188,7 @@ class YGame(object):
         """
         Return start and end date information for each week in the game.
         """
-        q = self.uri + "/game_weeks"
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri + "/game_weeks")
 
         if r['status'] == '200':
             return json.loads(c)["fantasy_content"]["game"][1]["game_weeks"]
@@ -206,8 +199,7 @@ class YGame(object):
         """
         Return start and end date information for each week in the game.
         """
-        q = self.uri + "/stat_categories"
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri + "/stat_categories")
 
         if r['status'] == '200':
             return json.loads(c)["fantasy_content"]["game"][1]["stat_categories"]
@@ -218,8 +210,7 @@ class YGame(object):
         """
         Return detailed description of all player position types for the game.
         """
-        q = self.uri + "/position_types"
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri + "/position_types")
 
         if r['status'] == '200':
             return json.loads(c)["fantasy_content"]["game"][1]["position_types"]
@@ -230,8 +221,7 @@ class YGame(object):
         """
         Return detailed description of all roster positions for the game.
         """
-        q = self.uri + "/roster_positions"
-        r, c = self.yauth.request(q)
+        r, c = self.yauth.request(self.uri + "/roster_positions")
 
         if r['status'] == '200':
             return json.loads(c)["fantasy_content"]["game"][1]["roster_positions"]
